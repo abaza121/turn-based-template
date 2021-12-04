@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64ac7c1eb16f06d40bc71f5ed834db7e, type: 3}
+  m_Name: AirPlane
+  m_EditorClassIdentifier: 
+  Prefab: {fileID: 4481449791588885029, guid: 2561ae7e6f2cc7e428753f98648e9c46, type: 3}
+  Type: 2
+  Name: Air Plane
+  Health: 15
+  Damage: 10
+  AttackRange: {x: 4, y: 4}
+  MoveRange: {x: 4, y: 4}
