@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using TurnBased.Data;
-using TurnBased.Grids;
 using UnityEngine;
 
 namespace TurnBased.Gameplay
 {
+    /// <summary> Initializes and verifies unit data and initial scenarios, to be used by <see cref="Gameplay.GameplayManager"/> </summary>
     public static class UnitInitializer
     {
         public static bool GenerateUnits(InitialSituation situation, UnitsFactory unitsFactory, out List<Unit> units)

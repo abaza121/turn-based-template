@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace TurnBased.Grids
 {
+    /// <summary> Initializes and verifies grid data to be used by <see cref="Gameplay.GameplayManager"/> </summary>
     public static class GridInitializer
     {
         public static bool TryGenerateGridData(InitialSituation situation, out GridData data)
@@ -15,8 +16,8 @@ namespace TurnBased.Grids
             }
 
             data = new GridData();
-            data.RowsCount = situation.GridSize.x;
-            data.ColumnsCount = situation.GridSize.y;
+            data.RowsCount = situation.GridSize.y;
+            data.ColumnsCount = situation.GridSize.x;
             data.CellSize = situation.CellSize;
             return true;
         }

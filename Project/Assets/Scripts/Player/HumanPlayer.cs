@@ -1,41 +1,55 @@
 using System.Collections.Generic;
+using System.Linq;
 using TurnBased.Gameplay;
 using TurnBased.Grids;
-using UnityEngine;
+using TurnBased.UI;
 
 namespace TurnBased.Player
 {
+    /// <summary>
+    /// Gives input control to the human player once he gets the turn.
+    /// </summary>
     public class HumanPlayer : Playerbase
     {
-        private GridRenderer _gridRenderer;
-        private Cell         _currentSelectedCell;
-        private bool         _disableInput;
+        private Cell m_currentSelectedCell;
+        private bool m_disableInput;
 
-        public HumanPlayer(GridRenderer gridRenderer, List<Unit> units) : base(units)
+        public HumanPlayer(GridRenderer gridRenderer, GameplayUIManager manager, List<Unit> units) : base(units, manager, gridRenderer)
         {
-            this._gridRenderer = gridRenderer;
+            this.m_gridRenderer      = gridRenderer;
         }
+
+        protected override PlayerType Type => PlayerType.Hooman;
 
         public override void StartTurn()
         {
-            this._gridRenderer.ShowCellsToChooseForUnits(this.m_myUnits);
-            this._gridRenderer.CellSelected += this.OnCellSelected;
+            base.StartTurn();
+            this.m_gridRenderer.ShowCellsToChooseForUnits(this.UnitsWithEnergy);
+            this.m_gridRenderer.CellSelected += this.OnCellSelected;
+            if(this.UnitsWithEnergy.Count() == 0) this.m_gameplayUIManager.ReadyToEndTurn();
+        }
+
+        public override void EndTurn()
+        {
+            this.m_gridRenderer.CellSelected -= this.OnCellSelected;
+            this.m_gridRenderer.ResetAll();
+            base.EndTurn();
         }
 
         void OnCellSelected(Cell cell)
         {
-            if (_disableInput) return;
-            if (_currentSelectedCell != null)
+            if (m_disableInput) return;
+            if (m_currentSelectedCell != null)
             {
                 this.OnChoosingAciton(cell);
                 return;
             }
 
-            if (cell.OccupyingUnit == null) this._gridRenderer.ShowCellsToChooseForUnits(this.m_myUnits);
-            else if (cell.OccupyingUnit.OwningPlayer == this.Id)
+            if (cell.OccupyingUnit == null) this.m_gridRenderer.ShowCellsToChooseForUnits(this.UnitsWithEnergy);
+            else if (cell.OccupyingUnit.OwningPlayer == this.Id && cell.OccupyingUnit.Energy.sqrMagnitude > 0)
             {
-                this._gridRenderer.ShowActionsForUnit(cell.OccupyingUnit);
-                _currentSelectedCell = cell;
+                this.m_gridRenderer.ShowActionsForUnit(cell.OccupyingUnit);
+                m_currentSelectedCell = cell;
             }
         }
 
@@ -44,27 +58,39 @@ namespace TurnBased.Player
             switch(cell.CurrentHighlightMode)
             {
                 case CellHighlightMode.NotHighlighted:
-                    this._gridRenderer.ShowCellsToChooseForUnits(this.m_myUnits);
+                    this.m_gridRenderer.ShowCellsToChooseForUnits(this.UnitsWithEnergy);
                     break;
                 case CellHighlightMode.CanChooseIt:
-                    this._currentSelectedCell = cell;
-                    this._gridRenderer.ShowActionsForUnit(cell.OccupyingUnit);
+                    this.m_currentSelectedCell = cell;
+                    this.m_gridRenderer.ShowActionsForUnit(cell.OccupyingUnit);
                     return;
                 case CellHighlightMode.CanMoveTo:
-                    this._disableInput = true;
-                    this._gridRenderer.ResetAll();
-                    this._currentSelectedCell.OccupyingUnit.MoveUnitFromTo(this._currentSelectedCell, cell, () =>
+                    this.m_disableInput = true;
+                    this.m_gridRenderer.ResetAll();
+                    this.m_gameplayUIManager.ChangeSkipButtonState(false);
+                    this.m_currentSelectedCell.OccupyingUnit.MoveUnitFromTo(this.m_currentSelectedCell, cell, () =>
                     {
-                        this._disableInput = false;
-                        this._gridRenderer.ShowCellsToChooseForUnits(this.m_myUnits, false);
+                        this.m_disableInput = false;
+                        this.m_gridRenderer.ShowCellsToChooseForUnits(this.UnitsWithEnergy, false);
+                        this.m_gameplayUIManager.ChangeSkipButtonState(true);
                     });
                     break;
                 case CellHighlightMode.CanAttack:
-                    this._currentSelectedCell.OccupyingUnit.AttackCell(cell);
+                    this.m_disableInput = true;
+                    this.m_gridRenderer.ResetAll();
+                    this.m_currentSelectedCell.OccupyingUnit.AttackUnit(cell.OccupyingUnit);
+                    this.m_gameplayUIManager.ChangeSkipButtonState(false);
+                    this.m_gridRenderer.ShowExplosion(cell, () =>
+                    {
+                        this.m_disableInput = false;
+                        this.m_gridRenderer.ShowCellsToChooseForUnits(this.UnitsWithEnergy, false);
+                        this.m_gameplayUIManager.ChangeSkipButtonState(true);
+                    });
                     break;
             }
 
-            this._currentSelectedCell = null;
+            if (this.UnitsWithEnergy.Count() == 0) this.m_gameplayUIManager.ReadyToEndTurn();
+            this.m_currentSelectedCell = null;
         }
     }
 }

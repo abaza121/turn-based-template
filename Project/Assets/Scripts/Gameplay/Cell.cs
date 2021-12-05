@@ -1,10 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace TurnBased.Gameplay
 {
+    /// <summary>
+    /// Controls the color and data for cell in <see cref="Position"/>.
+    /// </summary>
     public class Cell : MonoBehaviour
     {
         public CellHighlightMode CurrentHighlightMode
@@ -14,7 +15,6 @@ namespace TurnBased.Gameplay
         }
 
         public event Action<Cell> CellSelected;
-        public event Action<Cell> CellAttacked;
 
         public Vector2Int Position      { get; set; }
         public Unit       OccupyingUnit { get; set; }
@@ -40,12 +40,6 @@ namespace TurnBased.Gameplay
             }
 
             this.CurrentHighlightMode = cellHighlightMode;
-        }
-
-        public void TakeDamage(int damage)
-        {
-            this.OccupyingUnit.TakeDamage(damage);
-            this.CellAttacked?.Invoke(this);
         }
 
         public void OnCellPressed() => this.CellSelected?.Invoke(this);

@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace TurnBased.Data
 {
+    /// <summary>
+    /// Controls unit data setup, used by <see cref="UnitsFactory"/> to initialize units on the grid.
+    /// </summary>
     [CreateAssetMenu(menuName = "GameData/UnitSetup")]
     public class UnitSetup : ScriptableObject
     {
