@@ -1,4 +1,5 @@
 using System;
+using TurnBased.Player;
 using UnityEngine;
 
 namespace TurnBased.Data
@@ -8,6 +9,7 @@ namespace TurnBased.Data
     {
         public Vector2Int GridSize;
         public float CellSize;
+        public PlayerType[] Players;
         public UnitInitialState[] InitialUnits;
     }
 

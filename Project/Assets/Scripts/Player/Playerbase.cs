@@ -12,7 +12,14 @@ namespace TurnBased.Player
     /// </summary>
     public abstract class Playerbase
     {
+        /// <summary>
+        /// Invoked when the player has ended the turn.
+        /// </summary>
         public event Action TurnEnded;
+
+        /// <summary>
+        /// The index of the player in GameplayManager.
+        /// </summary>
         public int Id { get; set; }
 
         protected abstract PlayerType Type { get; }
@@ -25,6 +32,9 @@ namespace TurnBased.Player
         protected GameplayUIManager m_gameplayUIManager;
         protected GridRenderer      m_gridRenderer;
 
+        /// <summary>
+        /// Initializes the player and adds the listener so the player knows when a unit is dead from its side.
+        /// </summary>
         public Playerbase(List<Unit> units, GameplayUIManager manager, GridRenderer gridRenderer)
         {
             this.m_myUnits = units;
@@ -33,6 +43,9 @@ namespace TurnBased.Player
             foreach(var unit in units) unit.UnitDead += () => OnUnitDead(unit);
         }
 
+        /// <summary>
+        /// Starts the player turn, resets its unit energy and gets the UI ready based on its type.
+        /// </summary>
         public virtual void StartTurn()
         {
             foreach(var unit in m_myUnits) unit.ResetEnergy();
@@ -40,6 +53,9 @@ namespace TurnBased.Player
             this.m_gameplayUIManager.SkipButtonPressed += EndTurn;
         }
 
+        /// <summary>
+        /// Ends Player turn and gives control to the GameplayManager to give control to the next player.
+        /// </summary>
         public virtual void EndTurn()
         {
             TurnEnded.Invoke();

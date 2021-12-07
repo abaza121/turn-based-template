@@ -8,19 +8,35 @@ namespace TurnBased.Gameplay
     /// </summary>
     public class Cell : MonoBehaviour
     {
+        /// <summary>
+        /// Current Highlight mode of the cell in grid renderer.
+        /// </summary>
         public CellHighlightMode CurrentHighlightMode
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Invoked when the cell is selected via input.
+        /// </summary>
         public event Action<Cell> CellSelected;
 
-        public Vector2Int Position      { get; set; }
+        /// <summary>
+        /// Position of the cell in the grid.
+        /// </summary>
+        public Vector2Int Position { get; set; }
+
+        /// <summary>
+        /// Current occupying unit of the cell.
+        /// </summary>
         public Unit       OccupyingUnit { get; set; }
 
         [SerializeField] private MeshRenderer meshRenderer;
 
+        /// <summary>
+        /// Changes the highlight mode to given mode.
+        /// </summary>
         public void ChangeHighlight(CellHighlightMode cellHighlightMode)
         {
             switch (cellHighlightMode)
@@ -42,6 +58,9 @@ namespace TurnBased.Gameplay
             this.CurrentHighlightMode = cellHighlightMode;
         }
 
+        /// <summary>
+        /// Serialized event listener, invokes the event for the cell.
+        /// </summary>
         public void OnCellPressed() => this.CellSelected?.Invoke(this);
     }
 

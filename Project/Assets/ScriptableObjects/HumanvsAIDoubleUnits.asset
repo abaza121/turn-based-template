@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 866b4b2a96f9b12438e461e32aa0737e, type: 3}
-  m_Name: Default Very Large Situation 1
+  m_Name: HumanvsAIDoubleUnits
   m_EditorClassIdentifier: 
-  GridSize: {x: 20, y: 20}
-  CellSize: 0.5
+  Name: Human vs AI DoubleUnits!
+  GridSize: {x: 10, y: 10}
+  CellSize: 1
+  Players: 0200000001000000
   InitialUnits:
   - OwningPlayer: 0
     Type: 0
@@ -33,3 +35,21 @@ MonoBehaviour:
   - OwningPlayer: 1
     Type: 2
     Position: {x: 6, y: 10}
+  - OwningPlayer: 1
+    Type: 0
+    Position: {x: 4, y: 9}
+  - OwningPlayer: 1
+    Type: 1
+    Position: {x: 5, y: 9}
+  - OwningPlayer: 1
+    Type: 2
+    Position: {x: 6, y: 9}
+  - OwningPlayer: 0
+    Type: 0
+    Position: {x: 4, y: 2}
+  - OwningPlayer: 0
+    Type: 1
+    Position: {x: 5, y: 2}
+  - OwningPlayer: 0
+    Type: 2
+    Position: {x: 6, y: 2}

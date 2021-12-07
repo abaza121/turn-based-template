@@ -52,6 +52,14 @@ namespace TurnBased.Gameplay
             this.m_damage = setup.Damage;
         }
 
+        public void InitializeUnitAtCell(Cell cell, float scale, Vector3 rotation)
+        {
+            this.transform.localScale = Vector3.one * scale;
+            var targetLook = this.transform.position - cell.transform.position;
+            this.transform.SetPositionAndRotation(cell.transform.position, Quaternion.LookRotation(targetLook)); // the units initialize looking at the center point.
+            cell.OccupyingUnit = this;
+        }
+
         public void ResetEnergy()
         {
             this.unitAttacked = false;

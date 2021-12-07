@@ -6,6 +6,7 @@ namespace TurnBased.Utils
     /// <summary> Utilities that covers cell related maths.  </summary>
     public static class CellUtils
     {
+        /// <summary> Get a list of positions for the given range, uses a square range, this can make the game easily customizable with different behaviors if needed. </summary>
         public static List<Vector2Int> GetPositionsAtRange(this Vector2Int position, Vector2Int range)
         {
             var resultList = new List<Vector2Int>();

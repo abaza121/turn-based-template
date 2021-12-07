@@ -10,26 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 866b4b2a96f9b12438e461e32aa0737e, type: 3}
-  m_Name: Default Extremely Large Situation
+  m_Name: AIvsAISmallMap
   m_EditorClassIdentifier: 
-  GridSize: {x: 80, y: 80}
-  CellSize: 0.125
+  Name: AI vs AI small map
+  GridSize: {x: 5, y: 5}
+  CellSize: 2
+  Players: 0200000001000000
   InitialUnits:
   - OwningPlayer: 0
     Type: 0
-    Position: {x: 4, y: 1}
+    Position: {x: 2, y: 1}
   - OwningPlayer: 0
     Type: 1
-    Position: {x: 5, y: 1}
+    Position: {x: 3, y: 1}
   - OwningPlayer: 0
     Type: 2
-    Position: {x: 6, y: 1}
+    Position: {x: 4, y: 1}
   - OwningPlayer: 1
     Type: 0
-    Position: {x: 4, y: 10}
+    Position: {x: 2, y: 5}
   - OwningPlayer: 1
     Type: 1
-    Position: {x: 5, y: 10}
+    Position: {x: 3, y: 5}
   - OwningPlayer: 1
     Type: 2
-    Position: {x: 6, y: 10}
+    Position: {x: 4, y: 5}
