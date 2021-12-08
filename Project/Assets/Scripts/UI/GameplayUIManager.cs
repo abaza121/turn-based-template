@@ -38,7 +38,7 @@ namespace TurnBased.UI
         public void TurnStarted(PlayerType type)
         {
             skipButton.ChangeText("Skip Turn");
-            skipButton.ChangeButtonState(type == PlayerType.Hooman);
+            skipButton.ChangeButtonState(type == PlayerType.Human);
         }
     }
 }

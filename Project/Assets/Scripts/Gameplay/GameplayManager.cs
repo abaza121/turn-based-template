@@ -49,7 +49,7 @@ namespace TurnBased.Gameplay
                 if(extractedUnits.Count == 0) continue;
                 switch(playerTypes[i])
                 {
-                    case PlayerType.Hooman:
+                    case PlayerType.Human:
                         this.m_gamePlayers.Add(new HumanPlayer(this.gridRenderer, gameplayUIManager, extractedUnits));
                         break;
                     case PlayerType.AI:

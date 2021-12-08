@@ -19,7 +19,7 @@ namespace TurnBased.Player
             this.m_gridRenderer      = gridRenderer;
         }
 
-        protected override PlayerType Type => PlayerType.Hooman;
+        protected override PlayerType Type => PlayerType.Human;
 
         /// <summary>
         /// Show units that can be chosen and wait for cell selected event.

@@ -69,6 +69,6 @@ namespace TurnBased.Player
     {
         AI,
         SmartAI,
-        Hooman
+        Human
     }
 }
