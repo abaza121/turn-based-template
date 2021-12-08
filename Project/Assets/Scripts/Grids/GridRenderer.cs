@@ -55,6 +55,8 @@ namespace TurnBased.Grids
             foreach (var unit in units) GetCellAtPos(unit.CurrentCellPosition).ChangeHighlight(CellHighlightMode.CanChooseIt);
         }
 
+        public void HighlightCellWithUnit(Unit unit) => GetCellAtPos(unit.CurrentCellPosition).ChangeHighlight(CellHighlightMode.CanChooseIt);
+
         /// <summary>
         /// Resets all cells.
         /// </summary>
@@ -97,15 +99,22 @@ namespace TurnBased.Grids
         public void ShowExplosion(Vector2Int position, Action onComplete) => this.ShowExplosion(this.GetCellAtPos(position), onComplete);
 
         /// <summary> Shows explosion at the given cell. </summary>
-        public void ShowExplosion(Cell cell, Action onComplete) => this.StartCoroutine(this.ShowExplosionCoroutine(cell, onComplete));
+        public void ShowExplosion(Cell cell, Action onComplete)           => this.StartCoroutine(this.ShowExplosionCoroutine(cell, onComplete));
 
         /// <summary> Checks if the position is out of grid bounds. </summary>
-        public bool IsOutOfBounds(Vector2Int position) => position.x < m_cells.GetLowerBound(0) || position.x > m_cells.GetUpperBound(0) || position.y < m_cells.GetLowerBound(1) || position.y > m_cells.GetUpperBound(1);
+        public bool IsOutOfBounds(Vector2Int position)                    => position.x < m_cells.GetLowerBound(0) || position.x > m_cells.GetUpperBound(0) || position.y < m_cells.GetLowerBound(1) || position.y > m_cells.GetUpperBound(1);
 
         /// <summary> Checks if the cell at the given position is empty. </summary>
         public bool IsEmptyAtPos(Vector2Int position)                     => !this.IsOutOfBounds(position) && this.GetCellAtPos(position).OccupyingUnit == null;
 
+        /// <summary>
+        /// Get the cell at the given coordinates.
+        /// </summary>
         Cell GetCellAtPos(int x, int y) => (Cell)this.m_cells.GetValue(x, y);
+
+        /// <summary>
+        /// Instantiates cell at the given position, with the given size.
+        /// </summary>
         Cell InitializeCellAtPos(int column, int row, float size)
         {
             var cell = Instantiate(cellPrefab, this.transform);
@@ -117,8 +126,14 @@ namespace TurnBased.Grids
             return cell;
         }
 
+        /// <summary>
+        /// Propagates Cell Selected event with the given cell.
+        /// </summary>
         void OnCellSelected(Cell cell) => this.CellSelected?.Invoke(cell);
 
+        /// <summary>
+        /// Shows explosion at the given cell, and takes a callback to use on effect end.
+        /// </summary>
         IEnumerator ShowExplosionCoroutine(Cell cell, Action onComplete)
         {
             this.explosion.transform.position = cell.transform.position;

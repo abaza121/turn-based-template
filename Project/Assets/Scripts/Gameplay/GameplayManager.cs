@@ -16,6 +16,7 @@ namespace TurnBased.Gameplay
         [SerializeField] GameplayUIManager gameplayUIManager;
         [SerializeField] UnitsFactory      unitsFactory;
         [SerializeField] GridRenderer      gridRenderer;
+        [SerializeField] InitialSituation  defaultSituation; // Used if there is no game manager existing.
 
         GridData         m_currentGridData;
         List<Playerbase> m_gamePlayers;
@@ -26,7 +27,7 @@ namespace TurnBased.Gameplay
         /// </summary>
         void Start()
         {
-            var initialSituation = GameManager.Instance.ChosenInitalSituation;
+            var initialSituation = GameManager.SafeInstance != null ? GameManager.SafeInstance.ChosenInitalSituation : defaultSituation;
             // Initialize And Verify Data.
             if (!GridInitializer.TryGenerateGridData(initialSituation, out m_currentGridData)) return;
             if (!UnitInitializer.GenerateUnits(initialSituation, unitsFactory, out var units)) return;
@@ -71,6 +72,7 @@ namespace TurnBased.Gameplay
         /// </summary>
         void OnPlayerTurnEnded()
         {
+            if (m_gamePlayers.Count == 1) return;
             this.m_gamePlayers[m_currentPlayer].TurnEnded -= OnPlayerTurnEnded;
             ++m_currentPlayer;
             if (m_currentPlayer >= m_gamePlayers.Count) m_currentPlayer = 0;
@@ -95,10 +97,14 @@ namespace TurnBased.Gameplay
         {
             for(int i = 0;i< m_gamePlayers.Count;i++)
             {
-                if (!m_currentGridData.CurrentUnits.Any(x => x.OwningPlayer == i)) this.m_gamePlayers.RemoveAt(i);
+                if (!m_currentGridData.CurrentUnits.Any(x => x.OwningPlayer == this.m_gamePlayers[i].Id)) this.m_gamePlayers.RemoveAt(i);
             }
 
-            if (this.m_gamePlayers.Count == 1) this.gameplayUIManager.ShowEndGamePanel(this.m_gamePlayers[0].Id);
+            if (this.m_gamePlayers.Count == 1)
+            {
+                this.gameplayUIManager.ShowEndGamePanel(this.m_gamePlayers[0].Id + 1);
+                this.gridRenderer.StopAllCoroutines();
+            }
         }
     }
 }

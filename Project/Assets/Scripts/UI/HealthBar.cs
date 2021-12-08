@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using System;
 
 namespace TurnBased.UI
 {
@@ -33,10 +34,15 @@ namespace TurnBased.UI
         }
 
         void LateUpdate() => this.transform.position = this.m_camera.WorldToScreenPoint(m_unit.transform.position + Vector3.forward * positionOffset);  // Update the position of the bar based on the position of the unit and the offset.
-        void OnUnitHealthChanged()
+        void OnUnitHealthChanged(Action onHealthEffectChanged = null)
         {
-            if(m_unit.HealthPercent <= 0) Destroy(this.gameObject);
-            else                          DOTween.To(() => foreground.fillAmount, fillamount => foreground.fillAmount = fillamount, m_unit.HealthPercent, 1);  // Show changing health effect.
+            DOTween.To(() => foreground.fillAmount, fillamount => foreground.fillAmount = fillamount, m_unit.HealthPercent, 1).OnComplete(() => OnHealthEffectComplete(onHealthEffectChanged));  // Show changing health effect, time should be less than explosion time.
         }
+
+        void OnHealthEffectComplete(Action onHealthEffectComplete)
+        {
+            if (m_unit.HealthPercent <= 0) Destroy(this.gameObject);
+            onHealthEffectComplete?.Invoke();
+        }                     
     }
 }

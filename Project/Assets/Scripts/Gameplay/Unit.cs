@@ -10,7 +10,7 @@ namespace TurnBased.Gameplay
     /// </summary>
     public class Unit : MonoBehaviour
     {
-        public event Action HealthChanged;
+        public event Action<Action> HealthChanged;
         public event Action UnitDead;
 
         public Vector2Int AttackRange
@@ -86,8 +86,7 @@ namespace TurnBased.Gameplay
         public void TakeDamage(int damage)
         {
             this.m_currentHealth -= damage;
-            this.HealthChanged?.Invoke();
-            if(this.m_currentHealth <= 0) UnitDead?.Invoke();
+            this.HealthChanged?.Invoke(OnHealthEffectComplete);
         }
 
         void TakeEnergy(Vector2Int delta)
@@ -99,9 +98,13 @@ namespace TurnBased.Gameplay
             this.m_energy.y = Mathf.Max(this.m_energy.y, 0);
         }
 
+        void OnHealthEffectComplete()
+        {
+            if (this.m_currentHealth <= 0) UnitDead?.Invoke();
+        }
+
         void OnMovementComplete(Cell targetCell, Action onComplete)
         {
-            Debug.Log("Move Complete");
             this.CurrentCellPosition = targetCell.Position;
             targetCell.OccupyingUnit = this;
             onComplete.Invoke();

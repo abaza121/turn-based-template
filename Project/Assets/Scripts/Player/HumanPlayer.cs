@@ -21,6 +21,9 @@ namespace TurnBased.Player
 
         protected override PlayerType Type => PlayerType.Hooman;
 
+        /// <summary>
+        /// Show units that can be chosen and wait for cell selected event.
+        /// </summary>
         public override void StartTurn()
         {
             base.StartTurn();
@@ -29,6 +32,9 @@ namespace TurnBased.Player
             if(this.UnitsWithEnergy.Count() == 0) this.m_gameplayUIManager.ReadyToEndTurn();
         }
 
+        /// <summary>
+        /// Clear Cell Selected Event and propagate end turn to the gameplay manager.
+        /// </summary>
         public override void EndTurn()
         {
             this.m_gridRenderer.CellSelected -= this.OnCellSelected;
@@ -36,6 +42,9 @@ namespace TurnBased.Player
             base.EndTurn();
         }
 
+        /// <summary>
+        /// When a cell is selected check what type of unit in cell and show available action if allied unit.
+        /// </summary>
         void OnCellSelected(Cell cell)
         {
             if (m_disableInput) return;

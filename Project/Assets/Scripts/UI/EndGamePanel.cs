@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 namespace TurnBased.UI
 {
+    /// <summary>
+    /// The game over panel in which the player can restart with same situation or try a different one.
+    /// </summary>
     public class EndGamePanel : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI descriptionLabel;

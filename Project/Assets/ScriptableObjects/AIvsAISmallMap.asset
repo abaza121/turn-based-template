@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 866b4b2a96f9b12438e461e32aa0737e, type: 3}
   m_Name: AIvsAISmallMap
   m_EditorClassIdentifier: 
-  Name: AI vs AI small map
   GridSize: {x: 5, y: 5}
   CellSize: 2
-  Players: 0200000001000000
+  Players: 0100000001000000
   InitialUnits:
   - OwningPlayer: 0
     Type: 0

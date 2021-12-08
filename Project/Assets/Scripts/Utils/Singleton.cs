@@ -2,7 +2,9 @@ using UnityEngine;
 
 namespace TurnBased.Utils
 {
-
+    /// <summary>
+    /// A utility class that supports singleton design pattern, used for cross scene interactions.
+    /// </summary>
     public class Singleton<T> : MonoBehaviour where T : Component
     {
         private static T instance;
@@ -19,6 +21,18 @@ namespace TurnBased.Utils
                         obj.name = typeof(T).Name;
                         instance = obj.AddComponent<T>();
                     }
+                }
+                return instance;
+            }
+        }
+
+        public static T SafeInstance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = FindObjectOfType<T>();
                 }
                 return instance;
             }

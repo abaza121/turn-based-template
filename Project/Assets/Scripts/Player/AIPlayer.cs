@@ -10,7 +10,7 @@ using UnityEngine;
 namespace TurnBased.Player
 {
     /// <summary>
-    /// Controls AI Player behavior, making decisions and ending turns.
+    /// Controls AI Player behavior, making decisions and ending turns, this implements a dumb movement AI in which it returns random available position.
     /// </summary>
     public class AIPlayer : Playerbase
     {
@@ -28,6 +28,9 @@ namespace TurnBased.Player
             this.m_gridRenderer.StartCoroutine(this.TurnCoroutine());
         }
 
+        /// <summary>
+        /// Controls Turn behavior.
+        /// </summary>
         protected virtual IEnumerator TurnCoroutine()
         {
             foreach (var unit in UnitsWithEnergy)
@@ -40,20 +43,28 @@ namespace TurnBased.Player
             EndTurn();
         }
 
+        /// <summary>
+        /// Attack if enemy unit found in range.
+        /// </summary>
         protected IEnumerator AttackIfPossible(Unit unit)
         {
             var possiblePositions = unit.CurrentCellPosition.GetPositionsAtRange(unit.AttackRange);
             foreach (var enemyUnit in this.m_gridData.CurrentUnits.Where(x => x.OwningPlayer != this.Id))
                 if(possiblePositions.Contains(enemyUnit.CurrentCellPosition))
                 {
+                    this.m_gridRenderer.HighlightCellWithUnit(unit);
                     unit.AttackUnit(enemyUnit);
                     var wait = true;
                     this.m_gridRenderer.ShowExplosion(enemyUnit.CurrentCellPosition, () => wait = false);
                     while (wait) yield return null;
+                    this.m_gridRenderer.ResetAll();
                     break;
                 }
         }
 
+        /// <summary>
+        /// Move the given unit randomly.
+        /// </summary>
         IEnumerator MoveRandomly(Unit unit)
         {
             var possiblePositions = unit.CurrentCellPosition.GetPositionsAtRange(unit.Energy).Where(pos => !this.m_gridRenderer.IsOutOfBounds(pos) && this.m_gridRenderer.GetCellAtPos(pos).OccupyingUnit == null).ToList();

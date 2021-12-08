@@ -8,6 +8,9 @@ using TurnBased.Utils;
 
 namespace TurnBased.Player
 {
+    /// <summary>
+    /// A Smarter AI player with deterministic moves instead of random ones.
+    /// </summary>
     public class SmartAIPlayer : AIPlayer
     {
         public SmartAIPlayer(List<Unit> units, GameplayUIManager manager, GridData data, GridRenderer gridRenderer) : base(units, manager, data, gridRenderer) { }
